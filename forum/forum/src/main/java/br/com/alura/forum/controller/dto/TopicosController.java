@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -37,10 +39,16 @@ public class TopicosController {
 //        return TopicoDto.converter(Arrays.asList(topico,topico,topico));
 //    }
     @GetMapping
-    public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina, @RequestParam int qtd){
+//    public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso,
+//                                 @RequestParam int pagina,
+//                                 @RequestParam int qtd,
+//                                 @RequestParam String ordenacao){
 
-        Pageable paginacao = PageRequest.of(pagina, qtd);
-
+        //Pageable paginacao = PageRequest.of(pagina, qtd, Sort.Direction.DESC, ordenacao);
+    public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso,
+                                 @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable paginacao){
+//    Desta forma chama assim:        localhost:8080/topicos?page=0&size=10&sort=id,desc
+//    Ordenando por mais de um campo: localhost:8080/topicos?page=0&size=10&sort=id,desc&sort=dataCriacao,asc
         if (nomeCurso == null){
             Page<Topico> topicos = topicoRepository.findAll(paginacao);
             return TopicoDto.converter(topicos);
