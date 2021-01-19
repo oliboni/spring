@@ -8,6 +8,7 @@ class ForumApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
